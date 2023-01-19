@@ -1,44 +1,46 @@
-import React from 'react';
+import React, { useState } from "react";
 
 import ToDo from "./ToDo";
 
 const tasks = {
   veggies: ["🍅", "🥕", "🥔", "🌽"],
-  treats: ["🍩", "🍫"]
+  treats: ["🍩", "🍫"],
 };
 
-class Main extends React.Component {
-  state = {
-    todos: ['veggies', 'treats']
-  };
-  
-  completeTodo = index => {
-    console.log('id: ', index)
-    const todosCopy = [...this.state.todos];
-    todosCopy.splice(index, 1);
-    this.setState({
-      todos: todosCopy
-    });
-  }
+const Main = () => {
+  const [toDos, setTodos] = useState(Object.keys(tasks));
 
-  render() {
-    return (
-      <div>
-        <ul>
-          {this.state.todos.map((todotitle, theIndex) => {
-            return (
-              <li key={todotitle}>
-                <ToDo title={todotitle} tasks={tasks[todotitle]} allDone={() => this.completeTodo(theIndex)} />
-              </li>
-            );
-          })}
-        </ul>
-        {this.state.todos.length <= 0 && (
-          <h3>All done! <span role="img" aria-label="emoji">💜</span></h3>
-        )}
-      </div>
-    )
-  }
-}
+  const allDone = (index) => {
+    const updatedToDos = [...toDos];
+    updatedToDos.splice(index, 1);
+
+    setTodos(updatedToDos);
+  };
+
+  return (
+    <div>
+      <ul>
+        {toDos.map((toDo, index) => (
+          <ToDo
+            index={index}
+            key={toDo}
+            title={toDo}
+            toDoList={tasks[toDo]}
+            allDone={() => allDone(index)}
+          />
+        ))}
+      </ul>
+
+      {!toDos.length && (
+        <h3>
+          All done!{" "}
+          <span role="img" aria-label="emoji">
+            💜
+          </span>
+        </h3>
+      )}
+    </div>
+  );
+};
 
 export default Main;

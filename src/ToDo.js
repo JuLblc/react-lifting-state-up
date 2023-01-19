@@ -1,41 +1,33 @@
-import React from 'react';
-import Task from "./Task"
+import React, { useState } from "react";
+import Task from "./Task";
 
-class ToDo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tasks: props.tasks 
-    };
-  }
+const ToDo = ({ title, toDoList, allDone }) => {
+  const [tasks, setTasks] = useState(toDoList);
+  const deleteTask = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks.splice(index, 1);
 
-  updateToDoList = idx => {
-    console.log('idx: ', idx)
-    /***  
-      State shouldn't be modified directly and splice 
-      modifies the orginal array it's called on. 
-      Therefore we're using the spread operator to copy the array first. ;)
-    ***/
-    const taskListCopy = [...this.state.tasks]
-    taskListCopy.splice(idx, 1)
-
-    if (taskListCopy.length === 0) {
-      this.props.allDone();
+    if (!updatedTasks.length) {
+      allDone();
     }
+    setTasks(updatedTasks);
+  };
 
-    this.setState({tasks: taskListCopy})
-  }
-
-  render() {
-    return (
-      <div> 
-        <h2>{this.props.title}</h2>
-        {
-          this.state.tasks.map((aTask, index) => <Task index={index} deleteTask={this.updateToDoList} taskName={aTask} />)
-        }
-      </div>
-    )
-  }
-}
+  return (
+    <>
+      <h3>{title}</h3>
+      <ul>
+        {tasks.map((task, index) => (
+          <Task
+            key={index}
+            index={index}
+            taskName={task}
+            deleteTask={deleteTask}
+          />
+        ))}
+      </ul>
+    </>
+  );
+};
 
 export default ToDo;

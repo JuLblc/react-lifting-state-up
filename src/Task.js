@@ -1,9 +1,7 @@
-import React from 'react';
+import React from "react";
 
-function Task({index, taskName, deleteTask}) {
-  return (
-     <div onClick={()=>deleteTask(index)}>{taskName}</div>
-  )
-}
+const Task = ({ index, taskName, deleteTask }) => {
+  return <li onClick={() => deleteTask(index)}>{taskName}</li>;
+};
 
 export default Task;
